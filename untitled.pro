@@ -35,5 +35,7 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-DISTFILES += \
-    image/yard.jpg
+DISTFILES +=
+
+RESOURCES += \
+    images.qrc

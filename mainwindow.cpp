@@ -23,6 +23,7 @@
 #include "QThread"
 #include "QVBoxLayout"
 #include "Qt"
+#include "QLibrary"
 
 const int body_size = 15;
 const int area = 400;
@@ -35,10 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QSize size(400, 400);
     this->resize(size);
 
-    QString strDirPath = QCoreApplication::applicationDirPath();
-    qDebug() << strDirPath;
-    //QImage image = QImage(strDirPath + "/yard.jpg").scaled(this->size());
-    QImage image = QImage(strDirPath + "/yard.jpg");
+    QImage image;
+    qDebug() << image.load(":/images/yard.png");
     QPalette pal = this->palette();
     pal.setBrush(QPalette::Window, QBrush(image));
     this->setPalette(pal);
@@ -157,8 +156,7 @@ void MainWindow::on_MainWindow_iconSizeChanged(const QSize &iconSize)
 {
     QString strDirPath = QCoreApplication::applicationDirPath();
     qDebug() << strDirPath;
-    //QImage image = QImage(strDirPath + "/yard.jpg").scaled(this->size());
-    QImage image = QImage(strDirPath + "/yard.jpg");
+    QImage image = QImage(":/images/yard.png");
     QPalette pal = this->palette();
     pal.setBrush(QPalette::Window, QBrush(image));
     this->setPalette(pal);
@@ -176,8 +174,7 @@ void MainWindow::changeEvent(QEvent *event)
                 qDebug() << "minmin";
                 QString strDirPath = QCoreApplication::applicationDirPath();
                 qDebug() << strDirPath;
-                //QImage image = QImage(strDirPath + "/yard.jpg").scaled(this->size());
-                QImage image = QImage(strDirPath + "/yard.jpg");
+                QImage image = QImage(":/images/yard.png");
                 QPalette pal = this->palette();
                 pal.setBrush(QPalette::Window, QBrush(image));
                 this->setPalette(pal);
@@ -187,8 +184,7 @@ void MainWindow::changeEvent(QEvent *event)
                 qDebug() << "maxmax";
                 QString strDirPath = QCoreApplication::applicationDirPath();
                 qDebug() << strDirPath;
-                //QImage image = QImage(strDirPath + "/yard.jpg").scaled(this->size());
-                QImage image = QImage(strDirPath + "/yard.jpg");
+                QImage image = QImage(":/images/yard.png");
                 QPalette pal = this->palette();
                 pal.setBrush(QPalette::Window, QBrush(image));
                 this->setPalette(pal);
@@ -433,7 +429,6 @@ void MainWindow::slotSnakeMove()
     else
     {
         QMutableListIterator<SnakeBody> snake_it(snake);
-        SnakeBody *cur = NULL;
         SnakeBody first;
         SnakeBody last;
         switch (direction)
