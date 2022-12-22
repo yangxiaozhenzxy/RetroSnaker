@@ -22,6 +22,7 @@
 #include "QImage"
 #include "QThread"
 #include "QVBoxLayout"
+#include "Qt"
 
 const int body_size = 15;
 const int area = 400;
@@ -39,23 +40,23 @@ MainWindow::MainWindow(QWidget *parent) :
     //QImage image = QImage(strDirPath + "/yard.jpg").scaled(this->size());
     QImage image = QImage(strDirPath + "/yard.jpg");
     QPalette pal = this->palette();
-    pal.setBrush(QPalette::Background, QBrush(image));
+    pal.setBrush(QPalette::Window, QBrush(image));
     this->setPalette(pal);
 
     QColor clr = QColorDialog::getColor(Qt::red, this, tr("color dialog"));
     pal_clr = ui->label_2->palette();
-    pal_clr.setColor( QPalette::Background, clr);
+    pal_clr.setColor( QPalette::Window, clr);
 
     setFocusPolicy(Qt::StrongFocus);
     installEventFilter(this);
 
     QPoint p;
     QList < QPoint> list;
-    qsrand(QTime(0,0,0).secsTo(QTime::currentTime())); //不能放在循环里，否则容易出现很多相同随机数
+    srand(QTime(0,0,0).secsTo(QTime::currentTime())); //不能放在循环里，否则容易出现很多相同随机数
     for(int var =0; var < 1;++var)
     {
-        p.setX(qrand() % area);
-        p.setY(qrand() % area);
+        p.setX(rand() % area);
+        p.setY(rand() % area);
         list.append(p);
     }
 
@@ -159,7 +160,7 @@ void MainWindow::on_MainWindow_iconSizeChanged(const QSize &iconSize)
     //QImage image = QImage(strDirPath + "/yard.jpg").scaled(this->size());
     QImage image = QImage(strDirPath + "/yard.jpg");
     QPalette pal = this->palette();
-    pal.setBrush(QPalette::Background, QBrush(image));
+    pal.setBrush(QPalette::Window, QBrush(image));
     this->setPalette(pal);
 }
 
@@ -178,7 +179,7 @@ void MainWindow::changeEvent(QEvent *event)
                 //QImage image = QImage(strDirPath + "/yard.jpg").scaled(this->size());
                 QImage image = QImage(strDirPath + "/yard.jpg");
                 QPalette pal = this->palette();
-                pal.setBrush(QPalette::Background, QBrush(image));
+                pal.setBrush(QPalette::Window, QBrush(image));
                 this->setPalette(pal);
             }
             else if(Qt::WindowMaximized == stateEvent->oldState())
@@ -189,7 +190,7 @@ void MainWindow::changeEvent(QEvent *event)
                 //QImage image = QImage(strDirPath + "/yard.jpg").scaled(this->size());
                 QImage image = QImage(strDirPath + "/yard.jpg");
                 QPalette pal = this->palette();
-                pal.setBrush(QPalette::Background, QBrush(image));
+                pal.setBrush(QPalette::Window, QBrush(image));
                 this->setPalette(pal);
             }
         }
@@ -239,8 +240,8 @@ SnakeBody MainWindow::getFood()
     do
     {
         QPoint p;
-        p.setX(qrand() % area / body_size * body_size);
-        p.setY(qrand() % area / body_size * body_size);
+        p.setX(rand() % area / body_size * body_size);
+        p.setY(rand() % area / body_size * body_size);
 
         food.body = new QLabel(this);
         food.body ->setText("");
@@ -571,15 +572,15 @@ void MainWindow::slots_speed()
     {
     case 0:
         speed = 1;
-        qDebug() <<"easy speed" << endl;
+        qDebug() <<"easy speed";
         break;
     case 1:
         speed = 2;
-        qDebug() << "midle speed" << endl;
+        qDebug() << "midle speed";
         break;
     case 2:
         speed = 3;
-        qDebug() <<"hard speed" << endl;
+        qDebug() <<"hard speed";
         break;
     }
     emit sigSpeed(speed, time);
