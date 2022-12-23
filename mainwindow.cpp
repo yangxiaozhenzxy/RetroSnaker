@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pal.setBrush(QPalette::Window, QBrush(image));
     this->setPalette(pal);
 
-    QColor clr = QColorDialog::getColor(Qt::red, this, tr("color dialog"));
+    QColor clr = Qt::red;
     pal_clr = ui->label_2->palette();
     pal_clr.setColor( QPalette::Window, clr);
 
@@ -63,13 +63,13 @@ MainWindow::MainWindow(QWidget *parent) :
     p.setX(100 % area / body_size * body_size);
     p.setY(100 % area / body_size * body_size);
 
-    head.body = new QLabel(this);
-    head.body ->setText("");
+    head = new QLabel(this);
+    head ->setText("");
     QRect rec = QRect(p.rx(), p.ry() , body_size, body_size);
-    head.body->setGeometry(rec);
-    head.body ->setOpenExternalLinks(true);
-    head.body->setAutoFillBackground(true);
-    head.body->setPalette(pal_clr);
+    head->setGeometry(rec);
+    head ->setOpenExternalLinks(true);
+    head->setAutoFillBackground(true);
+    head->setPalette(pal_clr);
     snake.push_back(head);
 
     direction = DIR_INIT;
@@ -215,13 +215,13 @@ void MainWindow::on_radioButton_hard_clicked()
 bool MainWindow::isFoodInSnakeBody(const SnakeBody& food)
 {
     bool isIn = false;
-    SnakeBody *cur = NULL;
+    SnakeBody cur = NULL;
     QMutableListIterator<SnakeBody> snake_it(snake);
 
     for(snake_it.toFront(); snake_it.hasNext();)
     {
-        cur = &snake_it.next();
-        if(cur->body->pos().x() == food.body->pos().x() && cur->body->pos().y() == food.body->pos().y())
+        cur = snake_it.next();
+        if(cur->pos().x() == food->pos().x() && cur->pos().y() == food->pos().y())
         {
             isIn = true;
         }
@@ -239,35 +239,35 @@ SnakeBody MainWindow::getFood()
         p.setX(rand() % area / body_size * body_size);
         p.setY(rand() % area / body_size * body_size);
 
-        food.body = new QLabel(this);
-        food.body ->setText("");
+        food = new QLabel(this);
+        food ->setText("");
 
         QRect rec = QRect(p.rx(), p.ry() , body_size, body_size);
-        food.body->setGeometry(rec);
+        food->setGeometry(rec);
 
-        food.body ->setOpenExternalLinks(true);
-        food.body->setAutoFillBackground(true);
+        food ->setOpenExternalLinks(true);
+        food->setAutoFillBackground(true);
 
-        food.body->setPalette(pal_clr);
+        food->setPalette(pal_clr);
 
     }while(isFoodInSnakeBody(food));
-    food.body->setVisible(true);
-    food.body->repaint();
+    food->setVisible(true);
+    food->repaint();
     return food;
 }
 
 bool MainWindow::verifyDead()
 {
-    SnakeBody *head = NULL;
-    SnakeBody *cur = NULL;
+    SnakeBody head = NULL;
+    SnakeBody cur = NULL;
     try
     {
         QMutableListIterator<SnakeBody> snake_it(snake);
         snake_it.toFront();
         if(snake_it.hasNext())
         {
-            head = &snake_it.next();
-            if(head->body->pos().x() < 0 || head->body->pos().y() < 0 || head->body->pos().x() > area || head->body->pos().y() > area)
+            head = snake_it.next();
+            if(head->pos().x() < 0 || head->pos().y() < 0 || head->pos().x() > area || head->pos().y() > area)
             {
                 isDead = true;
                 return isDead;
@@ -275,8 +275,8 @@ bool MainWindow::verifyDead()
 
             for(; snake_it.hasNext();)
             {
-                cur =&snake_it.next();
-                if(head->body->pos().x() == cur->body->pos().x() && head->body->pos().y() == cur->body->pos().y())
+                cur =snake_it.next();
+                if(head->pos().x() == cur->pos().x() && head->pos().y() == cur->pos().y())
                 {
                     isDead = true;
                     break;
@@ -296,34 +296,34 @@ bool MainWindow::verifyDead()
 bool MainWindow::canEat()
 {
     bool canEat = false;
-    SnakeBody *cur = NULL;
+    SnakeBody cur = NULL;
     QMutableListIterator<SnakeBody> snake_it(snake);
     snake_it.toFront();
     if(snake_it.hasNext())
     {
-        cur = &snake_it.next();
+        cur = snake_it.next();
         switch (direction)
         {
         case DIR_UP:
-            if(cur->body->pos().y() - 15 == food.body->pos().y() && cur->body->pos().x() == food.body->pos().x())
+            if(cur->pos().y() - 15 == food->pos().y() && cur->pos().x() == food->pos().x())
             {
                 canEat = true;
             }
             break;
         case DIR_DOWN:
-            if(cur->body->pos().y() + 15 == food.body->pos().y() && cur->body->pos().x() == food.body->pos().x())
+            if(cur->pos().y() + 15 == food->pos().y() && cur->pos().x() == food->pos().x())
             {
                 canEat = true;
             }
             break;
         case DIR_LEFT:
-            if(cur->body->pos().x() - 15 == food.body->pos().x() && cur->body->pos().y() == food.body->pos().y())
+            if(cur->pos().x() - 15 == food->pos().x() && cur->pos().y() == food->pos().y())
             {
                 canEat = true;
             }
             break;
         case DIR_RIGHT:
-            if(cur->body->pos().x() + 15 == food.body->pos().x() && cur->body->pos().y() == food.body->pos().y())
+            if(cur->pos().x() + 15 == food->pos().x() && cur->pos().y() == food->pos().y())
             {
                 canEat = true;
             }
@@ -404,11 +404,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::repaintSnake()
 {
     QMutableListIterator<SnakeBody> snake_it(snake);
-    SnakeBody *cur = NULL;
+    SnakeBody cur = NULL;
     for(snake_it.toFront(); snake_it.hasNext();)
     {
-        cur = &snake_it.next();
-        cur->body->repaint();
+        cur = snake_it.next();
+        cur->repaint();
     }
 }
 
@@ -436,13 +436,13 @@ void MainWindow::slotSnakeMove()
         case DIR_UP:
             first = snake.at(0);
             last = snake.at(snake.count() - 1);
-            if(first.body == last.body)
+            if(first == last)
             {
-                first.body->move(first.body->pos().x(), first.body->pos().y() - body_size);
+                first->move(first->pos().x(), first->pos().y() - body_size);
             }
             else
             {
-                last.body->move(first.body->pos().x(), first.body->pos().y() - body_size);
+                last->move(first->pos().x(), first->pos().y() - body_size);
                 snake.prepend(last);
                 snake.removeLast();
             }
@@ -450,13 +450,13 @@ void MainWindow::slotSnakeMove()
         case DIR_DOWN:
             first = snake.at(0);
             last = snake.at(snake.count() - 1);
-            if(first.body == last.body)
+            if(first == last)
             {
-                first.body->move(first.body->pos().x() , first.body->pos().y() + body_size);
+                first->move(first->pos().x() , first->pos().y() + body_size);
             }
             else
             {
-                last.body->move(first.body->pos().x() , first.body->pos().y() + body_size);
+                last->move(first->pos().x() , first->pos().y() + body_size);
                 snake.prepend(last);
                 snake.removeLast();
             }
@@ -464,13 +464,13 @@ void MainWindow::slotSnakeMove()
         case DIR_LEFT:
             first = snake.at(0);
             last = snake.at(snake.count() - 1);
-            if(first.body == last.body)
+            if(first == last)
             {
-                first.body->move(first.body->pos().x() - body_size, first.body->pos().y());
+                first->move(first->pos().x() - body_size, first->pos().y());
             }
             else
             {
-                last.body->move(first.body->pos().x() - body_size, first.body->pos().y());
+                last->move(first->pos().x() - body_size, first->pos().y());
                 snake.prepend(last);
                 snake.removeLast();
             }
@@ -478,13 +478,13 @@ void MainWindow::slotSnakeMove()
         case DIR_RIGHT:
             first = snake.at(0);
             last = snake.at(snake.count() - 1);
-            if(first.body == last.body)
+            if(first == last)
             {
-                first.body->move(first.body->pos().x() + body_size, first.body->pos().y());
+                first->move(first->pos().x() + body_size, first->pos().y());
             }
             else
             {
-                last.body->move(first.body->pos().x() + body_size, first.body->pos().y());
+                last->move(first->pos().x() + body_size, first->pos().y());
                 snake.prepend(last);
                 snake.removeLast();
             }
@@ -590,4 +590,11 @@ void MainWindow::on_pushButton_clear_clicked()
     update_score();
     isStoped = false;
     direction = DIR_INIT;
+}
+
+void MainWindow::on_pushButton_change_clr_clicked()
+{
+    QColor clr = QColorDialog::getColor(Qt::red, this, tr("color dialog"));
+    pal_clr = ui->label_2->palette();
+    pal_clr.setColor( QPalette::Window, clr);
 }

@@ -128,6 +128,19 @@
      <string>清除</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_change_clr">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>100</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>切换颜色</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

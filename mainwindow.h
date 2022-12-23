@@ -23,10 +23,7 @@ enum Direction
     DIR_RIGHT
 };
 
-typedef struct SnakeBody_
-{
-    QLabel *body;
-}SnakeBody;
+typedef QLabel* SnakeBody;
 
 class MainWindow : public QMainWindow
 {
@@ -63,6 +60,8 @@ private slots:
     void repaintSnake();
 
     void on_pushButton_clear_clicked();
+
+    void on_pushButton_change_clr_clicked();
 
 private:
     Ui::MainWindow *ui;
