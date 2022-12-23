@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     head ->setOpenExternalLinks(true);
     head->setAutoFillBackground(true);
     head->setPalette(pal_clr);
-    snake.push_back(head);
+    snake.push_front(head);
 
     direction = DIR_INIT;
 
@@ -383,7 +383,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 
     if(canEat())
     {
-        snake.push_back(food);
+        snake.push_front(food);
         food = getFood();
         score++;
         update_score();
@@ -429,64 +429,67 @@ void MainWindow::slotSnakeMove()
     else
     {
         QMutableListIterator<SnakeBody> snake_it(snake);
-        SnakeBody first;
-        SnakeBody last;
+        SnakeBody cur;
         switch (direction)
         {
         case DIR_UP:
-            first = snake.at(0);
-            last = snake.at(snake.count() - 1);
-            if(first == last)
+            cur = NULL;
+            for(snake_it.toBack(); snake_it.hasPrevious();)
             {
-                first->move(first->pos().x(), first->pos().y() - body_size);
-            }
-            else
-            {
-                last->move(first->pos().x(), first->pos().y() - body_size);
-                snake.prepend(last);
-                snake.removeLast();
+                cur = snake_it.previous();
+                if(!snake_it.hasPrevious())
+                {
+                    cur->move(cur->pos().x(), cur->pos().y() - body_size);
+                }
+                else
+                {
+                    cur->move(snake_it.peekPrevious()->pos().x(), snake_it.peekPrevious()->pos().y());
+                }
             }
             break;
         case DIR_DOWN:
-            first = snake.at(0);
-            last = snake.at(snake.count() - 1);
-            if(first == last)
+            cur = NULL;
+            for(snake_it.toBack(); snake_it.hasPrevious();)
             {
-                first->move(first->pos().x() , first->pos().y() + body_size);
-            }
-            else
-            {
-                last->move(first->pos().x() , first->pos().y() + body_size);
-                snake.prepend(last);
-                snake.removeLast();
+                cur = snake_it.previous();
+                if(!snake_it.hasPrevious())
+                {
+                    cur->move(cur->pos().x(), cur->pos().y() + body_size);
+                }
+                else
+                {
+                    cur->move(snake_it.peekPrevious()->pos().x(), snake_it.peekPrevious()->pos().y());
+                }
             }
             break;
         case DIR_LEFT:
-            first = snake.at(0);
-            last = snake.at(snake.count() - 1);
-            if(first == last)
+            cur = NULL;
+            for(snake_it.toBack(); snake_it.hasPrevious();)
             {
-                first->move(first->pos().x() - body_size, first->pos().y());
-            }
-            else
-            {
-                last->move(first->pos().x() - body_size, first->pos().y());
-                snake.prepend(last);
-                snake.removeLast();
+                cur = snake_it.previous();
+                if(!snake_it.hasPrevious())
+                {
+                    cur->move(cur->pos().x() - body_size, cur->pos().y());
+                }
+                else
+                {
+                    cur->move(snake_it.peekPrevious()->pos().x(), snake_it.peekPrevious()->pos().y());
+                }
             }
             break;
         case DIR_RIGHT:
-            first = snake.at(0);
-            last = snake.at(snake.count() - 1);
-            if(first == last)
+            cur = NULL;
+            for(snake_it.toBack(); snake_it.hasPrevious();)
             {
-                first->move(first->pos().x() + body_size, first->pos().y());
-            }
-            else
-            {
-                last->move(first->pos().x() + body_size, first->pos().y());
-                snake.prepend(last);
-                snake.removeLast();
+                cur = snake_it.previous();
+                if(!snake_it.hasPrevious())
+                {
+                    cur->move(cur->pos().x() + body_size, cur->pos().y());
+                }
+                else
+                {
+                    cur->move(snake_it.peekPrevious()->pos().x() , snake_it.peekPrevious()->pos().y());
+                }
             }
             break;
         default:
@@ -495,7 +498,7 @@ void MainWindow::slotSnakeMove()
         repaintSnake();
         if(canEat())
         {
-            snake.push_back(food);
+            snake.push_front(food);
             food = getFood();
             score++;
             update_score();
